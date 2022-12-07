@@ -110,4 +110,42 @@ def plot_return(
     else:
         plt.show()
     return
+
+
+def plot_return_box(
+        labels: np.ndarray,
+        returns: np.ndarray,
+        k: int,
+        fig_size: tuple,
+        file_name: str=None
+        ):
+    """
+    visualize distibution of return in a histogram
+    args:
+        - labels: cluster labels of each data point, resulting from kmeans
+        - returns: annualized next day returns for each data point
+        - k: number of clusters == len(np.unique(labels))
+        - fig_size: the size of the plot
+        - file_name: save plot as file_name 'xxx.png'
     
+    """
+    fig, axs = plt.subplots(1, k, figsize=fig_size, sharey=True)
+    red_circle = dict(markerfacecolor='salmon', marker='o', markeredgecolor='whitesmoke')
+    mean_shape = dict(markerfacecolor='midnightblue', marker='D', markeredgecolor='white')
+    for cluster_num in range(k):
+        cluster_ind = np.argwhere(labels==cluster_num)
+        # add boxplot
+        axs[cluster_num].boxplot(returns[cluster_ind], flierprops=red_circle,
+                                    showmeans=True, meanprops=mean_shape)
+        title = 'cluster ' + str(cluster_num)
+        axs[cluster_num].set_title(title)
+        axs[cluster_num].tick_params(axis='y', labelsize=14)
+    # save plot if a file_name is passed in
+    plt.tight_layout()
+    if file_name:
+        parent_path = 'imgs/'
+        save_path = parent_path + file_name
+        plt.savefig(save_path)
+    else:
+        plt.show()
+    return 

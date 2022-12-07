@@ -36,4 +36,4 @@ def single_kmeans(k: int, X: np.ndarray) -> np.ndarray:
     """
     model = KMeans(n_clusters=k, random_state=0)
     model.fit(X)
-    return model.labels_
+    return model
